@@ -15,8 +15,8 @@ require './DNSPodHelper.rb'
 
 # Defination of static strings
 
-$login_email = "abc@abc.com"
-$login_password = "123456"
+$login_email = "abc@gmail.com"
+$login_password = "abc"
 
 $your_Domain = "ourvps.com"
 $your_SubDomain = "transmission"
@@ -24,13 +24,17 @@ $your_SubDomain = "transmission"
 # Execute section
 
 helper = DNSPodHelper.instance
-helper.SetUserInfo('abc@gmail.com', '123')
+helper.SetUserInfo($login_email, $login_password)
 
-puts helper.GetPublicIPAddr()
+publicIP = helper.GetPublicIPAddr()
 
 #puts GetAPIVersion()
-#result = GetDomainInfo()
+domains = helper.GetDomainInfo()
 #puts result
-#result1 = GetSubDomainIP(result[$your_Domain], $your_SubDomain)
-#puts result1
+
+subDomainIP = helper.GetSubDomainIP(domains[$your_Domain], $your_SubDomain)
+
+if(subDomainIP != publicIP)
+  puts "Public IP(#{publicIP}) is different from sub-domain IP(#{subDomainIP}), need to update!"
+end
 

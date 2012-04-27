@@ -6,22 +6,22 @@ require 'json'
 
 class DNSPodHelper
 
-  $login_email = ""
-  $login_password = ""
-
   $format = "json"
   $lang = "en"
+
+  $login_email = ""
+  $login_password = ""
+  $postFormat = ""
 
   include Singleton
 
   def SetUserInfo(email, pass)
       $login_email =  email
       $login_password = pass
+      $postFormat = "login_email=" + $login_email + "&login_password=" + $login_password + "&format=" + $format + "&lang=" + $lang
   end
 
   $userAgent = "DynDNS/0.1 (yexiaozhou2003@gmail.com)"
-  $postFormat = "login_email=" + $login_email + "&login_password=" + $login_password + "&format=" + $format + "&lang=" + $lang
-
   $getIpUrl = "http://members.3322.org/dyndns/getip"
 
 # Defination of functions
@@ -83,7 +83,7 @@ class DNSPodHelper
 
     if(content['status']['code'] == "1")
       content['records'].each { |obj|
-        subDomains[obj['name']] = obj['id']
+        subDomains[obj['name']] = obj['value']
       }
     else
       puts "Failed to get sub-domain records..."
