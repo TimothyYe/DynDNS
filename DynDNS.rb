@@ -6,20 +6,9 @@
 
 # Define required blocks
 
-require 'net/http'
-require 'net/https'
-require 'open-uri'
-require 'json'
-require './DNSPodHelper.rb'
-
-
-# Defination of static strings
-
-$login_email = "abc@gmail.com"
-$login_password = "abc"
-
-$your_Domain = "ourvps.com"
-$your_SubDomain = "transmission"
+require './DNSPodHelper'
+require './Logger'
+require './Config'
 
 # Execute section
 
@@ -34,7 +23,11 @@ domains = helper.GetDomainInfo()
 
 subDomainIP = helper.GetSubDomainIP(domains[$your_Domain], $your_SubDomain)
 
-if(subDomainIP != publicIP)
+puts "Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomainIP.strip}"
+Logger.instance.log("Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomainIP.strip}")
+
+if(subDomainIP.strip != publicIP.strip)
   puts "Public IP(#{publicIP}) is different from sub-domain IP(#{subDomainIP}), need to update!"
+  Logger.instance.log("Public IP(#{publicIP}) is different from sub-domain IP(#{subDomainIP}), need to update!")
 end
 

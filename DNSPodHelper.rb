@@ -21,7 +21,7 @@ class DNSPodHelper
       $postFormat = "login_email=" + $login_email + "&login_password=" + $login_password + "&format=" + $format + "&lang=" + $lang
   end
 
-  $userAgent = "DynDNS/0.1 (yexiaozhou2003@gmail.com)"
+  $userAgent = "DynDNS/0.1 (#{$login_email})"
   $getIpUrl = "http://members.3322.org/dyndns/getip"
 
 # Defination of functions
