@@ -6,6 +6,6 @@ class Logger
   end
  
   def log(msg)
-    @log.puts(msg)
+    @log.puts(Time.now.strftime("%Y-%m-%d %H:%M:%S  ") + msg)
   end
 end

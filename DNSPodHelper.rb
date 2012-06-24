@@ -1,8 +1,10 @@
+#coding: utf-8
 require 'singleton'
 require 'net/http'
 require 'net/https'
 require 'open-uri'
 require 'json'
+require './Logger'
 
 class DNSPodHelper
 
@@ -34,13 +36,7 @@ class DNSPodHelper
         'User-Agent' => $userAgent
     }
 
-    #puts postContent
     response = http.post2(functionAddr, postContent, headers)
-
-    #Output response for debug
-    #puts response.code
-    #puts response.message
-    #puts response.body
 
     return response
   end
@@ -70,25 +66,36 @@ class DNSPodHelper
         domainInfo[obj['name']] = obj['id']
       }
     else
-      puts "Failed to get domain id..."
+      #puts "Failed to get domain id..."
+      Logger.instance.log("Failed to get domain id...")
     end
 
     return domainInfo
   end
 
-  def GetSubDomainIP(domainId, subDomain)
+  def GetSubDomain(domainId, subDomain)
     response = PostRequest("/Record.List", $postFormat + "&domain_id=" + domainId.to_s() + "&offset=0&length=30")
     content = JSON.parse(response.body)
     subDomains = Hash.new
 
     if(content['status']['code'] == "1")
       content['records'].each { |obj|
-        subDomains[obj['name']] = obj['value']
+        subDomains[obj['name']] = obj
       }
     else
-      puts "Failed to get sub-domain records..."
+      #puts "Failed to get sub-domain records..."
+      Logger.instance.log("Failed to get sub-domain records...")
     end
 
     return subDomains[subDomain]
+  end
+
+  def UpdateSubDomainIP(domainId, recordId, subDomain, newIP)
+    response = PostRequest("/Record.Modify", $postFormat + "&domain_id=" + domainId.to_s() + "&record_id=" + recordId.to_s() + "&sub_domain=" + subDomain + "&record_type=A" + "&record_line=默认" + "&value=" + newIP)
+    content = JSON.parse(response.body)
+
+    if(content['status']['code'] == "1")
+      Logger.instance.log("DDNS IP updated!")
+    end
   end
 end
