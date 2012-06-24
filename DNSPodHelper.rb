@@ -95,7 +95,7 @@ class DNSPodHelper
     content = JSON.parse(response.body)
 
     if(content['status']['code'] == "1")
-      Logger.instance.log("DDNS IP updated!")
+      Logger.instance.log("DDNS IP updated successful!")
     end
   end
 end
