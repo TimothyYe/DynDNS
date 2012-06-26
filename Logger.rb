@@ -7,5 +7,6 @@ class Logger
  
   def log(msg)
     @log.puts(Time.now.strftime("%Y-%m-%d %H:%M:%S  ") + msg)
+    @log.flush
   end
 end
