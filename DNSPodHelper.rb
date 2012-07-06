@@ -41,11 +41,11 @@ class DNSPodHelper
     return response
   end
 
-  def GetPublicIPAddr()
+  def GetPublicIPAddr
     return open($getIpUrl).read
   end
 
-  def GetAPIVersion()
+  def GetAPIVersion
     response = PostRequest("/Info.Version", $postFormat)
     content = JSON.parse(response.body)
 
@@ -56,7 +56,7 @@ class DNSPodHelper
     end
   end
 
-  def GetDomainInfo()
+  def GetDomainInfo
     response = PostRequest("/Domain.List", $postFormat + "&type=all&offset=0&length=20")
     content = JSON.parse(response.body)
     domainInfo = Hash.new

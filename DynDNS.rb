@@ -18,10 +18,10 @@ helper.SetUserInfo($login_email, $login_password)
 loop {
 
 	begin
-	publicIP = helper.GetPublicIPAddr()
+	publicIP = helper.GetPublicIPAddr
 
 	#puts GetAPIVersion()
-	domains = helper.GetDomainInfo()
+	domains = helper.GetDomainInfo
 	#puts result
 
 	subDomain = helper.GetSubDomain(domains[$your_Domain], $your_SubDomain)
