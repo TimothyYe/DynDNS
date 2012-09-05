@@ -8,38 +8,42 @@
 
 require './DNSPodHelper'
 require './Logger'
-require './Config'
+
 
 # Execute section
+lambda {
 
-helper = DNSPodHelper.instance
-helper.SetUserInfo($login_email, $login_password)
+	helper = DNSPodHelper.instance
+	#helper.SetUserInfo($login_email, $login_password)
 
-loop {
+	loop {
 
-	begin
-	publicIP = helper.GetPublicIPAddr
+		begin
 
-	#puts GetAPIVersion()
-	domains = helper.GetDomainInfo
-	#puts result
+		publicIP = helper.GetPublicIPAddr
 
-	subDomain = helper.GetSubDomain(domains[$your_Domain], $your_SubDomain)
+		#puts GetAPIVersion()
+		domains = helper.GetDomainInfo
+		#puts result
 
-	#puts "Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomain['value'].strip}"
-	Logger.instance.log("Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomain['value'].strip}")
+		subDomain = helper.GetSubDomain(domains[DNSPodHelper::CONFIG["your_Domain"]], DNSPodHelper::CONFIG["your_SubDomain"])
 
-	if(subDomain['value'].strip != publicIP.strip)
-	#puts "Public IP(#{publicIP.strip}) is different from sub-domain IP(#{subDomain['value'].strip}), need to update!"
-  	Logger.instance.log("Public IP(#{publicIP.strip}) is different from sub-domain IP(#{subDomain['value'].strip}), need to update!")
-  	helper.UpdateSubDomainIP(domains[$your_Domain], subDomain['id'], $your_SubDomain, publicIP.strip)
-	end
+		#puts "Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomain['value'].strip}"
+		Logger.instance.log("Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomain['value'].strip}")
 
-	rescue => e
-		#puts e.class.to_s() + " occurs, failed to finish the process! Will try next time!"
-		Logger.instance.log(e.class.to_s() + " occurs, failed to finish the process! Will try next time!")
-	end
+		if(subDomain['value'].strip != publicIP.strip)
+		#puts "Public IP(#{publicIP.strip}) is different from sub-domain IP(#{subDomain['value'].strip}), need to update!"
+		Logger.instance.log("Public IP(#{publicIP.strip}) is different from sub-domain IP(#{subDomain['value'].strip}), need to update!")
+		helper.UpdateSubDomainIP(domains[DNSPodHelper::CONFIG["your_Domain"]], subDomain['id'], DNSPodHelper::CONFIG["your_SubDomain"], publicIP.strip)
+		end
 
-	sleep 300
-}
+		rescue => e
+			#puts e.class.to_s() + " occurs, failed to finish the process! Will try next time!"
+			Logger.instance.log(e.class.to_s() + " occurs, failed to finish the process! Will try next time!")
+		end
+
+		sleep 300
+	}
+
+}.call
 
