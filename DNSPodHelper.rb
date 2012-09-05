@@ -4,27 +4,40 @@ require 'net/http'
 require 'net/https'
 require 'open-uri'
 require 'json'
+require 'yaml'
 require './Logger'
 
 class DNSPodHelper
 
-  $format = "json"
-  $lang = "en"
+  #$format = "json"
+ # $lang = "en"
 
-  $login_email = ""
-  $login_password = ""
-  $postFormat = ""
+  #$login_email = ""
+  #$login_password = ""
+ # $postFormat = ""
 
   include Singleton
 
-  def SetUserInfo(email, pass)
-      $login_email =  email
-      $login_password = pass
-      $postFormat = "login_email=" + $login_email + "&login_password=" + $login_password + "&format=" + $format + "&lang=" + $lang
-  end
+  CONFIG=YAML.load_file(File.expand_path('./Config.yml'))
 
-  $userAgent = "DynDNS/0.1 (#{$login_email})"
-  $getIpUrl = "http://members.3322.org/dyndns/getip"
+  def initialize
+  	@format=CONFIG["format"]
+	@lang=CONFIG["lang"]
+	@login_email=CONFIG["login_email"]
+	@login_password=CONFIG["login_password"]
+	@postFormat="login_email=#{@login_email}&login_password=#{@login_password}&format=#{@format}&lang=#{@lang}"
+	@userAgent="DynDNS/0.1 (#{@login_email})"
+	@getIpUrl=CONFIG["ipUrl"]
+  end
+ 
+  #def SetUserInfo(email, pass)
+  #    $login_email =  email
+  #    $login_password = pass
+  #    $postFormat = "login_email=" + $login_email + "&login_password=" + $login_password + "&format=" + $format + "&lang=" + $lang
+ # end
+
+  #$userAgent = "DynDNS/0.1 (#{$login_email})"
+ # $getIpUrl = "http://members.3322.org/dyndns/getip"
 
 # Defination of functions
 
@@ -33,7 +46,7 @@ class DNSPodHelper
     http.use_ssl = true
     headers = {
         'Content-Type' => 'application/x-www-form-urlencoded',
-        'User-Agent' => $userAgent
+        'User-Agent' => @userAgent
     }
 
     response = http.post2(functionAddr, postContent, headers)
@@ -42,11 +55,11 @@ class DNSPodHelper
   end
 
   def GetPublicIPAddr
-    return open($getIpUrl).read
+    return open(@getIpUrl).read
   end
 
   def GetAPIVersion
-    response = PostRequest("/Info.Version", $postFormat)
+    response = PostRequest("/Info.Version", @postFormat)
     content = JSON.parse(response.body)
 
     if(content['status']['code'] == "1")
@@ -57,7 +70,7 @@ class DNSPodHelper
   end
 
   def GetDomainInfo
-    response = PostRequest("/Domain.List", $postFormat + "&type=all&offset=0&length=20")
+    response = PostRequest("/Domain.List", @postFormat + "&type=all&offset=0&length=20")
     content = JSON.parse(response.body)
     domainInfo = Hash.new
 
@@ -74,7 +87,7 @@ class DNSPodHelper
   end
 
   def GetSubDomain(domainId, subDomain)
-    response = PostRequest("/Record.List", $postFormat + "&domain_id=" + domainId.to_s() + "&offset=0&length=30")
+    response = PostRequest("/Record.List", @postFormat + "&domain_id=" + domainId.to_s() + "&offset=0&length=30")
     content = JSON.parse(response.body)
     subDomains = Hash.new
 
@@ -91,7 +104,7 @@ class DNSPodHelper
   end
 
   def UpdateSubDomainIP(domainId, recordId, subDomain, newIP)
-    response = PostRequest("/Record.Modify", $postFormat + "&domain_id=" + domainId.to_s() + "&record_id=" + recordId.to_s() + "&sub_domain=" + subDomain + "&record_type=A" + "&record_line=默认" + "&value=" + newIP)
+    response = PostRequest("/Record.Modify", @postFormat + "&domain_id=" + domainId.to_s() + "&record_id=" + recordId.to_s() + "&sub_domain=" + subDomain + "&record_type=A" + "&record_line=默认" + "&value=" + newIP)
     content = JSON.parse(response.body)
 
     if(content['status']['code'] == "1")
