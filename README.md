@@ -12,6 +12,8 @@ Created Date:2012.04.19
 
 Prepare your Ruby runtime first.
 
-Step one:   git clone git://github.com/TimothyYe/DynDNS.git
-Step two:   Edit "Config.yml", fill your domain information & DNSPod username & password.
-Step three: ruby DynDNS.rb &
+-**Step 1**:   git clone git://github.com/TimothyYe/DynDNS.git
+
+-**Step 2**:   Edit "Config.yml", fill your domain information & DNSPod username & password.
+
+--*Step 3**:   ruby DynDNS.rb &
