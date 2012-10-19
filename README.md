@@ -1,6 +1,6 @@
 #DynDNS
 ##Introduction:
-A ruby script which uses DNSPod to implement DDNS.
+DynDNS is a ruby script which uses DNSPod(http://www.dnspod.cn) to implement DDNS(Dynamic DNS).
 
 **Author:** Timothy
 
@@ -12,8 +12,8 @@ A ruby script which uses DNSPod to implement DDNS.
 
 Prepare your Ruby runtime first.
 
--**Step 1**:   git clone git://github.com/TimothyYe/DynDNS.git
+- **Step 1**:   git clone git://github.com/TimothyYe/DynDNS.git
 
--**Step 2**:   Edit "Config.yml", fill your domain information & DNSPod username & password.
+- **Step 2**:   Edit "Config.yml", fill your domain information & DNSPod username & password.
 
--**Step 3**:   ruby DynDNS.rb &
+- **Step 3**:   ruby DynDNS.rb &
