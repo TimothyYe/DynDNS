@@ -16,4 +16,4 @@ Prepare your Ruby runtime first.
 
 - **Step 2**:   Edit "Config.yml", fill your domain information & DNSPod username & password.
 
-- **Step 3**:   ruby DynDNS.rb &
+- **Step 3**:   ruby DynDNS.rb start
