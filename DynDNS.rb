@@ -8,42 +8,35 @@
 
 require './DNSPodHelper'
 require './Logger'
-
+require 'daemons'
 
 # Execute section
-lambda {
+Daemons.run_proc("DynDNS") do
 
+        puts 'DynDNS daemon starting...'
 	helper = DNSPodHelper.instance
-	#helper.SetUserInfo($login_email, $login_password)
 
 	loop {
 
 		begin
 
 		publicIP = helper.GetPublicIPAddr
-
-		#puts GetAPIVersion()
 		domains = helper.GetDomainInfo
-		#puts result
 
 		subDomain = helper.GetSubDomain(domains[DNSPodHelper::CONFIG["your_Domain"]], DNSPodHelper::CONFIG["your_SubDomain"])
 
-		#puts "Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomain['value'].strip}"
 		Logger.instance.log("Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomain['value'].strip}")
 
 		if(subDomain['value'].strip != publicIP.strip)
-		#puts "Public IP(#{publicIP.strip}) is different from sub-domain IP(#{subDomain['value'].strip}), need to update!"
 		Logger.instance.log("Public IP(#{publicIP.strip}) is different from sub-domain IP(#{subDomain['value'].strip}), need to update!")
 		helper.UpdateSubDomainIP(domains[DNSPodHelper::CONFIG["your_Domain"]], subDomain['id'], DNSPodHelper::CONFIG["your_SubDomain"], publicIP.strip)
 		end
 
 		rescue => e
-			#puts e.class.to_s() + " occurs, failed to finish the process! Will try next time!"
 			Logger.instance.log(e.class.to_s() + " occurs, failed to finish the process! Will try next time!")
 		end
 
-		sleep 300
+		sleep(1*60*5)
 	}
-
-}.call
+end
 
