@@ -27,17 +27,17 @@ Daemons.run_proc("DynDNS") do
 
 		subDomain = helper.GetSubDomain(domains[DNSPodHelper::CONFIG["your_Domain"]], DNSPodHelper::CONFIG["your_SubDomain"])
 
-		Logger::Log.info("Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomain['value'].strip}")
+		Utility::Log.info("Public IP is:#{publicIP.strip}, Sub-domain IP is:#{subDomain['value'].strip}")
 
 		if(subDomain['value'].strip != publicIP.strip)
 		
-		Logger::Log.info("Public IP(#{publicIP.strip}) is different from sub-domain IP(#{subDomain['value'].strip}), need to update!")
+		Utility::Log.info("Public IP(#{publicIP.strip}) is different from sub-domain IP(#{subDomain['value'].strip}), need to update!")
 		helper.UpdateSubDomainIP(domains[DNSPodHelper::CONFIG["your_Domain"]], subDomain['id'], DNSPodHelper::CONFIG["your_SubDomain"], publicIP.strip)
 		
 		end
 
 		rescue => e
-			Logger::Log.info(e.class.to_s() + " occurs, failed to finish the process! Will try next time!")
+			Utility::Log.info(e.class.to_s() + " occurs, failed to finish the process! Will try next time!")
 		end
 
 		sleep(1*60*5)
