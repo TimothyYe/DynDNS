@@ -80,7 +80,7 @@ class DNSPodHelper
       }
     else
       #puts "Failed to get domain id..."
-      Logger.instance.log("Failed to get domain id...")
+      Logger::Log.info("Failed to get domain id...")
     end
 
     return domainInfo
@@ -97,7 +97,7 @@ class DNSPodHelper
       }
     else
       #puts "Failed to get sub-domain records..."
-      Logger.instance.log("Failed to get sub-domain records...")
+      Logger::Log.info("Failed to get sub-domain records...")
     end
 
     return subDomains[subDomain]
@@ -108,7 +108,7 @@ class DNSPodHelper
     content = JSON.parse(response.body)
 
     if(content['status']['code'] == "1")
-      Logger.instance.log("DDNS IP updated successful!")
+      Logger.Log.info("DDNS IP updated successful!")
     end
   end
 end

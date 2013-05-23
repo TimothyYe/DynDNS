@@ -1,12 +1,5 @@
-class Logger
-  include Singleton
-   
-  def initialize
-    @log = File.open("./log.txt", "a")
-  end
- 
-  def log(msg)
-    @log.puts(Time.now.strftime("%Y-%m-%d %H:%M:%S  ") + msg)
-    @log.flush
-  end
+require 'logger'
+
+module Logger
+	Log = Logger.new(File.expand_path('./DynDNS.log'), 'weekly')
 end
