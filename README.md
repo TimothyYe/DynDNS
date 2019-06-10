@@ -2,6 +2,8 @@
 ##Introduction:
 DynDNS is a ruby script which uses DNSPod(http://www.dnspod.cn) to implement DDNS(Dynamic DNS).
 
+For more powerful DDNS tool, please visit [https://github.com/TimothyYe/godns](https://github.com/TimothyYe/godns)
+
 **Author:** Timothy
 
 **Contributor:** Jason (https://github.com/outmanone)
